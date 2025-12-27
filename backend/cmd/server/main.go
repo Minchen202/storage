@@ -6,6 +6,7 @@ import (
 	"os"
 	"p2p-storage/backend/internal/api"
 	"p2p-storage/backend/internal/auth"
+	"p2p-storage/backend/internal/storage"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -23,7 +24,12 @@ func main() {
 	}
 	defer db.Close()
 
-	env := &api.Env{DB: db}
+	r2Client, err := storage.NewR2Client()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	env := &api.Env{DB: db, R2Client: r2Client}
 
 	r := gin.Default()
 
@@ -36,6 +42,7 @@ func main() {
 	protectedRoutes := r.Group("/api")
 	protectedRoutes.Use(auth.AuthMiddleware())
 	{
+		// Profile endpoint
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
 			userID, _ := c.Get("userID")
 			c.JSON(200, gin.H{
@@ -44,10 +51,16 @@ func main() {
 			})
 		})
 
+		// Peer management endpoints
 		protectedRoutes.POST("/peer/heartbeat", env.HeartbeatHandler)
 
+		// File management endpoints
 		protectedRoutes.POST("/files", env.CreateFileHandler)
 		protectedRoutes.GET("/files", env.GetFilesHandler)
+
+		// Chunk management endpoints
+		protectedRoutes.POST("/chunks/upload/:hash", env.UploadChunkHandler)
+		protectedRoutes.GET("/chunks/:hash", env.DownloadChunkHandler)
 	}
 
 	r.GET("/health", func(c *gin.Context) {

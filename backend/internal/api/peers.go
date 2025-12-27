@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const UptimeRewardInterval = 600 // 10 minutes
+const UptimeRewardInterval = 600 // 10 minutes in seconds
 
 func (env *Env) HeartbeatHandler(c *gin.Context) {
 	userID, exists := c.Get("userID")
