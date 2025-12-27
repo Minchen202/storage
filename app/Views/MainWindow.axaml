@@ -1,0 +1,217 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="P2PStorageApp.MainWindow"
+        Title="P2P Storage"
+        Width="1200" Height="700"
+        Background="#1F2937">
+
+    <Grid>
+        <!-- Login/Register Screen -->
+        <Grid Name="LoginScreen" Background="#1F2937" IsVisible="True">
+            <StackPanel Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="P2P Storage" FontSize="32" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,40"/>
+                
+                <TextBlock Text="Email" Foreground="#9CA3AF" Margin="0,0,0,8"/>
+                <TextBox Name="EmailBox" Watermark="your@email.com" Padding="12" Background="#374151" Foreground="White" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
+                
+                <TextBlock Text="Password" Foreground="#9CA3AF" Margin="0,0,0,8"/>
+                <TextBox Name="PasswordBox" PasswordChar="*" Watermark="••••••••" Padding="12" Background="#374151" Foreground="White" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
+                
+                <TextBlock Name="AuthError" Foreground="#EF4444" TextWrapping="Wrap" Margin="0,0,0,16" IsVisible="False"/>
+                
+                <Button Name="LoginButton" Content="Login" Padding="12" Background="#2563EB" Foreground="White" FontWeight="Bold" HorizontalAlignment="Stretch" Margin="0,0,0,8" Click="OnLoginClick"/>
+                <Button Name="RegisterButton" Content="Register" Padding="12" Background="#374151" Foreground="White" HorizontalAlignment="Stretch" Click="OnRegisterClick"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main App Screen -->
+        <Grid Name="AppScreen" IsVisible="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="256"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Header -->
+                    <Border Grid.Row="0" Padding="24,20" BorderBrush="#374151" BorderThickness="0,0,0,1">
+                        <TextBlock Text="P2P Storage" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    </Border>
+
+                    <!-- Navigation -->
+                    <StackPanel Grid.Row="1" Margin="16,16,16,0">
+                        <Button Name="FilesTab" Content="📁 My Files" Padding="12" Background="#2563EB" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnFilesTabClick"/>
+                        <Button Name="UploadTab" Content="⬆️ Upload" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnUploadTabClick"/>
+                        <Button Name="StatsTab" Content="📊 Statistics" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnStatsTabClick"/>
+                        <Button Name="SettingsTab" Content="⚙️ Settings" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="OnSettingsTabClick"/>
+                    </StackPanel>
+
+                    <!-- Status Footer -->
+                    <Border Grid.Row="2" Padding="16" BorderBrush="#374151" BorderThickness="0,1,0,0">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Status" FontSize="12" Foreground="#9CA3AF"/>
+                                <Border Grid.Column="1" Background="#10B981" CornerRadius="12" Padding="8,4">
+                                    <TextBlock Name="StatusText" Text="Online" FontSize="11" Foreground="White" FontWeight="Bold"/>
+                                </Border>
+                            </Grid>
+                            <TextBlock Name="UserEmailText" Text="" FontSize="11" Foreground="#9CA3AF" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Content Area -->
+            <ScrollViewer Grid.Column="1" Background="#111827">
+                <StackPanel Margin="32">
+                    
+                    <!-- Files Content -->
+                    <StackPanel Name="FilesContent" IsVisible="True">
+                        <Grid Margin="0,0,0,24">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="My Files" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                            <Button Grid.Column="1" Name="UploadFileButton" Content="+ Upload File" Padding="12,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnUploadFileClick"/>
+                        </Grid>
+
+                        <TextBox Name="SearchBox" Watermark="🔍 Search files..." Padding="12" Background="#1F2937" Foreground="White" BorderThickness="1" BorderBrush="#374151" Margin="0,0,0,16"/>
+
+                        <StackPanel Name="FilesList">
+                            <!-- Files will be added dynamically -->
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Upload Content -->
+                    <StackPanel Name="UploadContent" IsVisible="False">
+                        <TextBlock Text="Upload File" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,24"/>
+                        
+                        <Border Background="#1F2937" BorderBrush="#4B5563" BorderThickness="2" CornerRadius="8" Padding="64,48" Margin="0,0,0,24">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="⬆️" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                <TextBlock Text="Drag and drop files here" FontSize="18" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                                <TextBlock Text="or click to browse" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                <Button Name="SelectFileButton" Content="Select Files" Padding="16,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnSelectFileClick"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24">
+                            <StackPanel>
+                                <TextBlock Text="Upload Settings" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
+                                <CheckBox Name="EncryptCheck" Content="Encrypt before upload" Foreground="#D1D5DB" IsChecked="True" Margin="0,0,0,12"/>
+                                <CheckBox Name="ErasureCodingCheck" Content="Enable erasure coding" Foreground="#D1D5DB" IsChecked="True" Margin="0,0,0,12"/>
+                                <TextBlock Text="Redundancy level" Foreground="#D1D5DB" Margin="0,0,0,8"/>
+                                <ComboBox Name="RedundancyCombo" Background="#374151" Foreground="White" SelectedIndex="0">
+                                    <ComboBoxItem>Standard (4+2 chunks)</ComboBoxItem>
+                                    <ComboBoxItem>High (3+3 chunks)</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Statistics Content -->
+                    <StackPanel Name="StatsContent" IsVisible="False">
+                        <TextBlock Text="Statistics" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,24"/>
+                        
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
+                            <Border Grid.Row="0" Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,8,8">
+                                <StackPanel>
+                                    <TextBlock Text="💾 Storage Contributed" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Name="StorageContributed" Text="10 GB" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
+                                    <TextBlock Text="Available to network" FontSize="12" Foreground="#9CA3AF"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="0" Grid.Column="1" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="8,0,0,8">
+                                <StackPanel>
+                                    <TextBlock Text="📊 Storage Quota" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Name="StorageQuota" Text="12.5 GB" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
+                                    <TextBlock Text="Earned from uptime" FontSize="12" Foreground="#9CA3AF"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="1" Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,8,0">
+                                <StackPanel>
+                                    <TextBlock Text="⏰ Total Uptime" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Name="TotalUptime" Text="96 hours" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
+                                    <TextBlock Text="+2.5 GB earned" FontSize="12" Foreground="#9CA3AF"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="1" Grid.Column="1" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="8,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="📡 Peers Connected" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Name="PeersConnected" Text="12" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
+                                    <TextBlock Text="Currently online" FontSize="12" Foreground="#9CA3AF"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,16,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Storage Usage" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Used" FontSize="12" Foreground="#9CA3AF"/>
+                                    <TextBlock Grid.Column="1" Name="StorageUsageText" Text="2.35 GB / 12.5 GB" FontSize="12" Foreground="White"/>
+                                </Grid>
+                                <Border Background="#374151" Height="12" CornerRadius="6" Margin="0,8,0,0">
+                                    <Border Name="StorageUsageBar" Background="#2563EB" Height="12" CornerRadius="6" HorizontalAlignment="Left" Width="150"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Settings Content -->
+                    <StackPanel Name="SettingsContent" IsVisible="False">
+                        <TextBlock Text="Settings" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,24"/>
+                        
+                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="Storage Contribution" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
+                                <TextBlock Text="Contribute to network" Foreground="#D1D5DB" Margin="0,0,0,8"/>
+                                <Slider Name="StorageSlider" Minimum="10" Maximum="100" Value="10" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="10 GB (minimum)" FontSize="12" Foreground="#9CA3AF"/>
+                                    <TextBlock Grid.Column="1" Text="100 GB" FontSize="12" Foreground="#9CA3AF" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="Application Settings" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
+                                <CheckBox Content="Start on system boot" Foreground="#D1D5DB" Margin="0,0,0,12"/>
+                                <CheckBox Content="Minimize to system tray" Foreground="#D1D5DB" IsChecked="True" Margin="0,0,0,12"/>
+                                <CheckBox Content="Show notifications" Foreground="#D1D5DB" IsChecked="True"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24">
+                            <StackPanel>
+                                <TextBlock Text="Network Settings" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
+                                <TextBlock Text="API Endpoint" Foreground="#D1D5DB" Margin="0,0,0,8"/>
+                                <TextBox Name="ApiEndpointBox" Text="http://localhost:8080" Padding="12" Background="#374151" Foreground="White" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
+                                <Button Name="SaveSettingsButton" Content="Save Settings" Padding="12,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnSaveSettingsClick"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
