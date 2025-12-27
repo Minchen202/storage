@@ -168,45 +168,6 @@ dotnet publish -c Release -r osx-x64 --self-contained
 dotnet publish -c Release -r linux-x64 --self-contained
 ```
 
-## Project Structure
-
-(This section is unchanged and remains as it was in the original)
-
-## Security
-
-(This section is unchanged and remains as it was in the original)
-
-## Storage Economics
-
-(This section is unchanged and remains as it was in the original)
-
-## Testing
-
-(This section is unchanged and remains as it was in the original)
-
-## Deployment
-
-Full deployment instructions for the backend can be found in `backend/DEPLOY.md`.
-
-## API Documentation
-
-(This section is unchanged and remains as it was in the original)
-
-## Contributing
-
-(This section is unchanged and remains as it was in the original)
-
-## Known Issues
-
-- [ ] Cold start on Render free tier (~30-60s delay)
-- [ ] No mobile apps yet (desktop only)
-- [ ] Limited to 500MB database on Supabase free tier
-- [ ] R2 free tier limited to 10GB anchor storage
-
-## Roadmap
-
-The project roadmap is in `roadmap.md`.
-
 ## Acknowledgments
 - Inspired by IPFS, Storj, and BitTorrent
 - Thanks to all contributors!
