@@ -1,7 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="app.MainWindow"
-        Title="P2P Storage"
+        Title="Storage App"
         Width="1200" Height="700"
         Background="#1F2937">
 
@@ -12,11 +12,11 @@
                 <TextBlock Text="P2P Storage" FontSize="32" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,40"/>
                 
                 <TextBlock Text="Email" Foreground="#9CA3AF" Margin="0,0,0,8"/>
-                <TextBox Name="EmailBox" Watermark="your@email.com" Padding="12" Background="#374151" Foreground="White" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
+                <TextBox Name="EmailBox" Padding="12" Background="#374151" Foreground="#2e0766" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
                 
                 <TextBlock Text="Password" Foreground="#9CA3AF" Margin="0,0,0,8"/>
-                <TextBox Name="PasswordBox" PasswordChar="*" Watermark="••••••••" Padding="12" Background="#374151" Foreground="White" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
-                
+                <TextBox Name="PasswordBox" PasswordChar="*" Padding="12" Background="#374151" Foreground="#2e0766" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
+
                 <TextBlock Name="AuthError" Foreground="#EF4444" TextWrapping="Wrap" Margin="0,0,0,16" IsVisible="False"/>
                 
                 <Button Name="LoginButton" Content="Login" Padding="12" Background="#2563EB" Foreground="White" FontWeight="Bold" HorizontalAlignment="Stretch" Margin="0,0,0,8" Click="OnLoginClick"/>
@@ -41,10 +41,10 @@
 
                     <!-- Navigation -->
                     <StackPanel Grid.Row="1" Margin="16,16,16,0">
-                        <Button Name="FilesTab" Content="📁 My Files" Padding="12" Background="#2563EB" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnFilesTabClick"/>
-                        <Button Name="UploadTab" Content="⬆️ Upload" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnUploadTabClick"/>
-                        <Button Name="StatsTab" Content="📊 Statistics" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnStatsTabClick"/>
-                        <Button Name="SettingsTab" Content="⚙️ Settings" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="OnSettingsTabClick"/>
+                        <Button Name="FilesTab" Content="My Files" Padding="12" Background="#2563EB" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnFilesTabClick"/>
+                        <Button Name="UploadTab" Content="Upload" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnUploadTabClick"/>
+                        <Button Name="StatsTab" Content="Statistics" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnStatsTabClick"/>
+                        <Button Name="SettingsTab" Content="Settings" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="OnSettingsTabClick"/>
                     </StackPanel>
 
                     <!-- Status Footer -->
@@ -94,7 +94,7 @@
                         
                         <Border Background="#1F2937" BorderBrush="#4B5563" BorderThickness="2" CornerRadius="8" Padding="64,48" Margin="0,0,0,24">
                             <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="⬆️" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
                                 <TextBlock Text="Drag and drop files here" FontSize="18" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,8"/>
                                 <TextBlock Text="or click to browse" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,0,0,16"/>
                                 <Button Name="SelectFileButton" Content="Select Files" Padding="16,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnSelectFileClick"/>
@@ -122,7 +122,7 @@
                         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
                             <Border Grid.Row="0" Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,8,8">
                                 <StackPanel>
-                                    <TextBlock Text="💾 Storage Contributed" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Text="Storage Contributed" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
                                     <TextBlock Name="StorageContributed" Text="10 GB" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
                                     <TextBlock Text="Available to network" FontSize="12" Foreground="#9CA3AF"/>
                                 </StackPanel>
@@ -130,7 +130,7 @@
 
                             <Border Grid.Row="0" Grid.Column="1" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="8,0,0,8">
                                 <StackPanel>
-                                    <TextBlock Text="📊 Storage Quota" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Text="Storage Quota" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
                                     <TextBlock Name="StorageQuota" Text="12.5 GB" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
                                     <TextBlock Text="Earned from uptime" FontSize="12" Foreground="#9CA3AF"/>
                                 </StackPanel>
@@ -138,7 +138,7 @@
 
                             <Border Grid.Row="1" Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,8,0">
                                 <StackPanel>
-                                    <TextBlock Text="⏰ Total Uptime" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Text="Total Uptime" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
                                     <TextBlock Name="TotalUptime" Text="96 hours" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
                                     <TextBlock Text="+2.5 GB earned" FontSize="12" Foreground="#9CA3AF"/>
                                 </StackPanel>
@@ -146,7 +146,7 @@
 
                             <Border Grid.Row="1" Grid.Column="1" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="8,0,0,0">
                                 <StackPanel>
-                                    <TextBlock Text="📡 Peers Connected" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                    <TextBlock Text="Peers Connected" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
                                     <TextBlock Name="PeersConnected" Text="12" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
                                     <TextBlock Text="Currently online" FontSize="12" Foreground="#9CA3AF"/>
                                 </StackPanel>
