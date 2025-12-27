@@ -41,6 +41,8 @@ This guide provides step-by-step instructions for deploying the Go backend of th
             sync: false
           - key: R2_SECRET_ACCESS_KEY
             sync: false
+          - key: R2_BUCKET_NAME
+            sync: false
     ```
     *Note: This file is for setting up a new service from scratch. If you are connecting an existing repository, you can set these values in the Render dashboard instead.*
 
@@ -52,6 +54,7 @@ This guide provides step-by-step instructions for deploying the Go backend of th
     *   `R2_ACCOUNT_ID`: Your Cloudflare R2 Account ID.
     *   `R2_ACCESS_KEY_ID`: Your Cloudflare R2 Access Key ID.
     *   `R2_SECRET_ACCESS_KEY`: Your Cloudflare R2 Secret Access Key.
+    *   `R2_BUCKET_NAME`: The name of the R2 bucket you created (e.g., `peer-storage-anchor`).
 
 5.  **Deploy:** Render will automatically build and deploy your application. After the first deployment, it will automatically redeploy on every push to your connected branch.
 
