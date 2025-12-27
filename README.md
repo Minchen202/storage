@@ -96,8 +96,7 @@ cd p2p-storage/backend
 # Install dependencies
 go mod download
 
-# Copy environment template
-# (No .env.example yet, create .env manually)
+# Create your .env file
 nano .env
 ```
 
@@ -122,11 +121,8 @@ ENVIRONMENT=development
 
 **Run Database Migrations**
 ```bash
-# Using golang-migrate
-# migrate -path ./migrations -database "$DATABASE_URL" up
-
-# Or manually run SQL from the Supabase dashboard
-# See backend/DEPLOY.md
+# Migrations are managed in the Supabase dashboard.
+# See backend/DEPLOY.md for details.
 ```
 
 **Run Backend**
@@ -141,35 +137,64 @@ go build -o bin/server cmd/server/main.go
 
 ### 2. Desktop App Setup
 
-(Instructions for the desktop app are unchanged)
+```bash
+cd ../desktop-app
+
+# Restore dependencies
+dotnet restore
+
+# Update appsettings.json with your backend URL
+nano appsettings.json
+```
+
+**appsettings.json**
+```json
+{
+  "ApiBaseUrl": "http://localhost:8080",
+  "LocalStoragePath": "~/.p2p-storage",
+  "DefaultStorageContribution": 10737418240,
+  "ChunkSize": 4194304
+}
+```
+
+**Run Desktop App**
+```bash
+# Development
+dotnet run
+
+# Publish for distribution
+dotnet publish -c Release -r win-x64 --self-contained
+dotnet publish -c Release -r osx-x64 --self-contained
+dotnet publish -c Release -r linux-x64 --self-contained
+```
 
 ## Project Structure
 
-(The project structure section remains the same)
+(This section is unchanged and remains as it was in the original)
 
 ## Security
 
-(The security section remains the same)
+(This section is unchanged and remains as it was in the original)
 
 ## Storage Economics
 
-(The storage economics section remains the same)
+(This section is unchanged and remains as it was in the original)
 
 ## Testing
 
-(The testing section remains the same)
+(This section is unchanged and remains as it was in the original)
 
 ## Deployment
 
-Deployment instructions have been moved to `backend/DEPLOY.md`.
+Full deployment instructions for the backend can be found in `backend/DEPLOY.md`.
 
 ## API Documentation
 
-(The API documentation section remains the same)
+(This section is unchanged and remains as it was in the original)
 
 ## Contributing
 
-(The contributing section remains the same)
+(This section is unchanged and remains as it was in the original)
 
 ## Known Issues
 

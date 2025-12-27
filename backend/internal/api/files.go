@@ -59,3 +59,24 @@ func (env *Env) GetFilesHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, files)
 }
+
+func (env *Env) DeleteFileHandler(c *gin.Context) {
+	fileID := c.Param("id")
+	if fileID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "File ID is required"})
+		return
+	}
+
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+
+	if err := db.DeleteFile(env.DB, fileID, userID.(string)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete file"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "File deleted successfully"})
+}

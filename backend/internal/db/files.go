@@ -52,3 +52,10 @@ func GetFilesByUser(db *sql.DB, userID string) ([]models.File, error) {
 
 	return files, nil
 }
+
+func DeleteFile(db *sql.DB, fileID, userID string) error {
+	// The ON DELETE CASCADE in the schema will handle deleting chunks and chunk_locations
+	query := `DELETE FROM files WHERE id = $1 AND user_id = $2`
+	_, err := db.Exec(query, fileID, userID)
+	return err
+}

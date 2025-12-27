@@ -2,17 +2,25 @@ package main
 
 import (
 	"database/sql"
-	"log"
+	"io"
 	"os"
 	"p2p-storage/backend/internal/api"
 	"p2p-storage/backend/internal/auth"
 	"p2p-storage/backend/internal/storage"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
+	// Setup structured logging
+	log := logrus.New()
+	log.SetFormatter(&logrus.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+	log.SetLevel(logrus.InfoLevel)
+
 	connStr := os.Getenv("DATABASE_URL")
 	if connStr == "" {
 		log.Fatal("DATABASE_URL environment variable is not set")
@@ -31,7 +39,24 @@ func main() {
 
 	env := &api.Env{DB: db, R2Client: r2Client}
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery())
+	// Custom logger middleware
+	r.Use(func(c *gin.Context) {
+		start := time.Now()
+		c.Next()
+		latency := time.Since(start)
+		log.WithFields(logrus.Fields{
+			"status":     c.Writer.Status(),
+			"method":     c.Request.Method,
+			"path":       c.Request.URL.Path,
+			"ip":         c.ClientIP(),
+			"latency":    latency,
+			"user_agent": c.Request.UserAgent(),
+		}).Info("request")
+	})
+	// Apply rate limiting to all requests
+	r.Use(api.RateLimitMiddleware())
 
 	authRoutes := r.Group("/api/auth")
 	{
@@ -42,7 +67,8 @@ func main() {
 	protectedRoutes := r.Group("/api")
 	protectedRoutes.Use(auth.AuthMiddleware())
 	{
-		// Profile endpoint
+		// User endpoints
+		protectedRoutes.GET("/user/stats", env.GetUserStatsHandler)
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
 			userID, _ := c.Get("userID")
 			c.JSON(200, gin.H{
@@ -51,12 +77,16 @@ func main() {
 			})
 		})
 
+
 		// Peer management endpoints
 		protectedRoutes.POST("/peer/heartbeat", env.HeartbeatHandler)
+		protectedRoutes.GET("/peers/discover", env.DiscoverPeersHandler)
+		protectedRoutes.GET("/peer/connect", env.WebSocketHandler) // WebSocket endpoint
 
 		// File management endpoints
 		protectedRoutes.POST("/files", env.CreateFileHandler)
 		protectedRoutes.GET("/files", env.GetFilesHandler)
+		protectedRoutes.DELETE("/files/:id", env.DeleteFileHandler)
 
 		// Chunk management endpoints
 		protectedRoutes.POST("/chunks/upload/:hash", env.UploadChunkHandler)

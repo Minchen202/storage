@@ -28,3 +28,19 @@ func (env *Env) HeartbeatHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Heartbeat received"})
 }
+
+func (env *Env) DiscoverPeersHandler(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+
+	peers, err := db.GetOnlinePeers(env.DB, 50, userID.(string)) // Return up to 50 peers
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to discover peers"})
+		return
+	}
+
+	c.JSON(http.StatusOK, peers)
+}

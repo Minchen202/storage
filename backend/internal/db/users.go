@@ -47,3 +47,21 @@ func GetUserByEmail(db *sql.DB, email string) (*models.User, error) {
 	}
 	return user, nil
 }
+
+func GetUserStats(db *sql.DB, userID string) (*models.User, error) {
+	user := &models.User{}
+	query := `SELECT id, email, created_at, storage_contributed, storage_quota, total_uptime_seconds, last_online FROM users WHERE id = $1`
+	err := db.QueryRow(query, userID).Scan(
+		&user.ID,
+		&user.Email,
+		&user.CreatedAt,
+		&user.StorageContributed,
+		&user.StorageQuota,
+		&user.TotalUptimeSeconds,
+		&user.LastOnline,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
