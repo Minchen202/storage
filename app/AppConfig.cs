@@ -1,4 +1,4 @@
-namespace P2PStorageApp;
+namespace app;
 
 public static class AppConfig
 {

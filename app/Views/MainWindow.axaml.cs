@@ -8,7 +8,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 
-namespace P2PStorageApp;
+namespace app;
 
 public partial class MainWindow : Window
 {

@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="P2PStorageApp.MainWindow"
+        x:Class="app.MainWindow"
         Title="P2P Storage"
         Width="1200" Height="700"
         Background="#1F2937">

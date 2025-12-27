@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace P2PStorageApp;
+namespace app;
 
 public partial class App : Application
 {
