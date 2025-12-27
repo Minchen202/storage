@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"io"
 	"os"
 	"p2p-storage/backend/internal/api"
 	"p2p-storage/backend/internal/auth"
