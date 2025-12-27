@@ -9,7 +9,7 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 
 ### Backend
 - **Language:** Go
-- **Framework:** Gin (lightweight HTTP) or Fiber (fast)
+- **Framework:** Gin
 - **Database:** PostgreSQL (Supabase free tier - 500MB)
 - **Object Storage:** Cloudflare R2 (10GB free)
 - **Hosting:** Render (free tier)
@@ -17,7 +17,7 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 
 ### Desktop App
 - **Language:** C# .NET 8+
-- **UI:** Avalonia (cross-platform) or WPF (Windows-only)
+- **UI:** Avalonia (cross-platform)
 - **Networking:** HttpClient + WebSocket libraries
 - **Local DB:** SQLite
 - **Crypto:** System.Security.Cryptography
@@ -35,22 +35,22 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 ### Backend Tasks
 
 **Week 1: Core API Setup**
-- [ ] Set up Go project structure
-- [ ] Initialize Render deployment config
-- [ ] Set up Supabase PostgreSQL connection
-- [ ] Set up Cloudflare R2 SDK integration
-- [ ] Implement health check endpoint (`/health`)
-- [ ] Create database schema (see below)
-- [ ] Implement JWT authentication middleware
-- [ ] Create user registration endpoint (`POST /api/auth/register`)
-- [ ] Create user login endpoint (`POST /api/auth/login`)
-- [ ] Create user profile endpoint (`GET /api/user/profile`)
+- [x] Set up Go project structure
+- [x] Initialize Render deployment config (`render.yaml`)
+- [x] Set up Supabase PostgreSQL connection
+- [x] Set up Cloudflare R2 SDK integration
+- [x] Implement health check endpoint (`/health`)
+- [x] Create database schema
+- [x] Implement JWT authentication middleware
+- [x] Create user registration endpoint (`POST /api/auth/register`)
+- [x] Create user login endpoint (`POST /api/auth/login`)
+- [x] Create user profile endpoint (`GET /api/user/profile`)
 
 **Week 2: Storage Management**
-- [ ] Implement storage quota tracking
-- [ ] Create uptime tracking system (ping endpoint)
-- [ ] Build contribution calculation logic (10GB base + uptime bonuses)
-- [ ] Create endpoint to report peer status (`POST /api/peer/heartbeat`)
+- [x] Implement storage quota tracking (in schema)
+- [x] Create uptime tracking system (ping endpoint)
+- [ ] Build contribution calculation logic (partially done)
+- [x] Create endpoint to report peer status (`POST /api/peer/heartbeat`)
 - [ ] Create endpoint to get storage stats (`GET /api/user/stats`)
 
 ### Desktop App Tasks
@@ -77,19 +77,15 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 ### Backend Tasks
 
 **Week 3: Chunk Management**
-- [ ] Create chunk metadata table
-- [ ] Implement chunk upload endpoint (`POST /api/chunks/upload`)
-  - Accept chunk binary data
-  - Store in R2 (anchor storage)
-  - Save metadata to PostgreSQL
-- [ ] Implement file metadata endpoint (`POST /api/files/create`)
-  - Store file info (name, size, chunk_hashes)
-- [ ] Build peer selection algorithm (find 5 available peers)
+- [x] Create chunk metadata table
+- [x] Implement chunk upload endpoint (`POST /api/chunks/upload`)
+- [x] Implement file metadata endpoint (`POST /api/files/create`)
+- [x] Build peer selection algorithm
 - [ ] Create chunk distribution logic
 
 **Week 4: Peer Distribution**
 - [ ] Implement chunk assignment to peers (`POST /api/chunks/assign`)
-- [ ] Create endpoint for peers to download assigned chunks (`GET /api/chunks/:hash`)
+- [x] Create endpoint for peers to download assigned chunks (`GET /api/chunks/:hash`)
 - [ ] Build chunk verification system (challenge-response)
 - [ ] Implement queue system for offline peers
 - [ ] Add background job for chunk redistribution
@@ -122,13 +118,13 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 
 **Week 5: Peer Coordination**
 - [ ] Build WebSocket server for real-time peer communication
-- [ ] Implement peer online/offline tracking
+- [x] Implement peer online/offline tracking (via heartbeats)
 - [ ] Create peer discovery endpoint (`GET /api/peers/discover`)
 - [ ] Build chunk request routing (server requests from peers)
 - [ ] Add timeout handling for unresponsive peers
 
 **Week 6: Anchor Storage**
-- [ ] Implement fallback to anchor (R2) for unavailable chunks
+- [x] Implement fallback to anchor (R2) for unavailable chunks
 - [ ] Add caching logic (last 30 days uploads stay on anchor)
 - [ ] Create background job to clean old anchor chunks
 - [ ] Implement redundancy monitoring
@@ -158,20 +154,11 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 ### Backend Tasks
 
 **Week 7: Download Orchestration**
-- [ ] Create file list endpoint (`GET /api/files`)
+- [x] Create file list endpoint (`GET /api/files`)
 - [ ] Implement chunk location lookup
 - [ ] Build chunk retrieval from peers
-  - Request from available peers first
-  - Fallback to anchor storage
 - [ ] Create download stream endpoint (`GET /api/files/:id/download`)
 - [ ] Add chunk reassembly logic
-
-**Week 8: Optimization**
-- [ ] Implement parallel chunk downloads
-- [ ] Add download speed throttling (prevent abuse)
-- [ ] Create download bandwidth tracking
-- [ ] Implement partial download resume
-- [ ] Add download analytics
 
 ### Desktop App Tasks
 
@@ -196,18 +183,18 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 ### Backend Tasks
 
 **Week 9: Monitoring & Logging**
-- [ ] Add structured logging (logrus or zap)
+- [ ] Add structured logging
 - [ ] Implement error tracking
-- [ ] Create admin dashboard endpoint (user stats)
+- [ ] Create admin dashboard endpoint
 - [ ] Add database query optimization
-- [ ] Implement rate limiting on endpoints
+- [ ] Implement rate limiting
 
 **Week 10: Security & Testing**
-- [ ] Security audit (SQL injection, XSS prevention)
+- [ ] Security audit
 - [ ] Add CORS configuration
 - [ ] Implement request validation
-- [ ] Write integration tests for critical flows
-- [ ] Load testing with simulated peers
+- [ ] Write integration tests
+- [ ] Load testing
 
 ### Desktop App Tasks
 
@@ -534,7 +521,3 @@ func SelectPeersForChunk(chunkID string, count int) ([]Peer, error) {
 3. **Chunk size:** 4MB good? Test with different sizes?
 4. **Redistribution trigger:** Immediately when dropping below 5 copies, or wait 24h grace period?
 5. **Free tier limits:** What happens when user hits Render bandwidth limit mid-month?
-
----
-
-This is your roadmap. Break it into GitHub issues, assign to your dev, and start building! Let me know if you need any section expanded or clarified.
