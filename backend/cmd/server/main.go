@@ -36,7 +36,6 @@ func main() {
 	protectedRoutes := r.Group("/api")
 	protectedRoutes.Use(auth.AuthMiddleware())
 	{
-		// Profile endpoint
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
 			userID, _ := c.Get("userID")
 			c.JSON(200, gin.H{
@@ -45,10 +44,8 @@ func main() {
 			})
 		})
 
-		// Peer management endpoints
 		protectedRoutes.POST("/peer/heartbeat", env.HeartbeatHandler)
 
-		// File management endpoints
 		protectedRoutes.POST("/files", env.CreateFileHandler)
 		protectedRoutes.GET("/files", env.GetFilesHandler)
 	}
