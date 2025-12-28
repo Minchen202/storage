@@ -131,7 +131,11 @@ func main() {
 		// User endpoints
 		protectedRoutes.GET("/user/stats", env.GetUserStatsHandler)
 		protectedRoutes.GET("/profile", func(c *gin.Context) {
-			userID, _ := c.Get("userID")
+			userID, exists := c.Get("userID")
+			if !exists {
+				c.JSON(401, gin.H{"error": "Unauthorized"})
+				return
+			}
 			c.JSON(200, gin.H{
 				"message": "ok",
 				"userID":  userID,
