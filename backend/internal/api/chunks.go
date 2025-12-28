@@ -13,7 +13,7 @@ func (env *Env) UploadChunkHandler(c *gin.Context) {
 		return
 	}
 
-	err := env.R2Client.UploadChunk(chunkHash, c.Request.Body)
+	err := env.R2Client.UploadChunk(c.Request.Context(), chunkHash, c.Request.Body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload chunk"})
 		return
@@ -29,7 +29,7 @@ func (env *Env) DownloadChunkHandler(c *gin.Context) {
 		return
 	}
 
-	chunkData, err := env.R2Client.DownloadChunk(chunkHash)
+	chunkData, err := env.R2Client.DownloadChunk(c.Request.Context(), chunkHash)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Chunk not found"})
 		return

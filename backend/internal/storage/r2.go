@@ -35,7 +35,7 @@ func NewR2Client() (*R2Client, error) {
 		}, nil
 	})
 
-	cfg, err := config.LoadDefaultConfig(context.TODO(),
+	cfg, err := config.LoadDefaultConfig(context.Background(),
 		config.WithEndpointResolverWithOptions(r2Resolver),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKeyID, accessKeySecret, "")),
 	)
@@ -52,8 +52,8 @@ func NewR2Client() (*R2Client, error) {
 }
 
 // UploadChunk uploads a chunk to R2.
-func (c *R2Client) UploadChunk(chunkHash string, data io.Reader) error {
-	_, err := c.S3Client.PutObject(context.TODO(), &s3.PutObjectInput{
+func (c *R2Client) UploadChunk(ctx context.Context, chunkHash string, data io.Reader) error {
+	_, err := c.S3Client.PutObject(ctx, &s3.PutObjectInput{
 		Bucket: &c.BucketName,
 		Key:    &chunkHash,
 		Body:   data,
@@ -62,8 +62,8 @@ func (c *R2Client) UploadChunk(chunkHash string, data io.Reader) error {
 }
 
 // DownloadChunk downloads a chunk from R2.
-func (c *R2Client) DownloadChunk(chunkHash string) (io.ReadCloser, error) {
-	output, err := c.S3Client.GetObject(context.TODO(), &s3.GetObjectInput{
+func (c *R2Client) DownloadChunk(ctx context.Context, chunkHash string) (io.ReadCloser, error) {
+	output, err := c.S3Client.GetObject(ctx, &s3.GetObjectInput{
 		Bucket: &c.BucketName,
 		Key:    &chunkHash,
 	})
