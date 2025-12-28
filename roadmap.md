@@ -41,9 +41,9 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 - [x] Set up Cloudflare R2 SDK integration
 - [x] Implement health check endpoint (`/health`)
 - [x] Create database schema
-- [x] Implement JWT authentication middleware
-- [x] Create user registration endpoint (`POST /api/auth/register`)
-- [x] Create user login endpoint (`POST /api/auth/login`)
+- [x] Implement JWT authentication middleware (Debugging Required)
+- [x] Create user registration endpoint (`POST /api/auth/register`) (Debugging Required)
+- [x] Create user login endpoint (`POST /api/auth/login`) (Debugging Required)
 - [x] Create user profile endpoint (`GET /api/user/profile`)
 
 **Week 2: Storage Management**
@@ -183,7 +183,8 @@ Hybrid P2P file storage with centralized coordination. Users contribute storage 
 ### Backend Tasks
 
 **Week 9: Monitoring & Logging**
-- [ ] Add structured logging
+- [ ] Fix signup/login functionality
+- [ ] Add enhanced structured logging
 - [ ] Implement error tracking
 - [ ] Create admin dashboard endpoint
 - [ ] Add database query optimization
