@@ -13,7 +13,20 @@
         ExtendClientAreaTitleBarHeightHint="44"
         SystemDecorations="None">
 
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Icons.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Window.Styles>
+        <Style Selector="PathIcon">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+        </Style>
+
         <Style Selector="Button">
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="#20FFFFFF"/>
@@ -335,7 +348,7 @@
                                    Height="44"
                                    Padding="16,0">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
-                                    <TextBlock Text="📁" FontSize="16"/>
+                                    <PathIcon Data="{StaticResource FolderIcon}"/>
                                     <TextBlock Text="My Files" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
                             </Button>
@@ -349,7 +362,7 @@
                                    Height="44"
                                    Padding="16,0">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
-                                    <TextBlock Text="⬆" FontSize="16"/>
+                                    <PathIcon Data="{StaticResource ArrowUpIcon}"/>
                                     <TextBlock Text="Upload" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
                             </Button>
@@ -363,7 +376,7 @@
                                    Height="44"
                                    Padding="16,0">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
-                                    <TextBlock Text="📊" FontSize="16"/>
+                                    <PathIcon Data="{StaticResource BarChartIcon}"/>
                                     <TextBlock Text="Statistics" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
                             </Button>
@@ -377,7 +390,7 @@
                                    Height="44"
                                    Padding="16,0">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
-                                    <TextBlock Text="⚙" FontSize="16"/>
+                                    <PathIcon Data="{StaticResource GearIcon}"/>
                                     <TextBlock Text="Settings" FontSize="14" FontWeight="SemiBold"/>
                                 </StackPanel>
                             </Button>
@@ -468,9 +481,9 @@
                                         Padding="80"
                                         HorizontalAlignment="Center">
                                     <StackPanel Spacing="20" HorizontalAlignment="Center">
-                                        <TextBlock Text="📤" 
-                                                  FontSize="64"
-                                                  HorizontalAlignment="Center"/>
+                                        <PathIcon Data="{StaticResource UploadIcon}"
+                                                  Width="64"
+                                                  Height="64"/>
                                         <TextBlock Text="Click to select a file" 
                                                   FontSize="18"
                                                   FontWeight="SemiBold"
@@ -517,7 +530,7 @@
                                                 Padding="24"
                                                 Margin="0,0,12,0">
                                             <StackPanel Spacing="8">
-                                                <TextBlock Text="💾" FontSize="32"/>
+                                                <PathIcon Data="{StaticResource HardDriveIcon}" Width="32" Height="32"/>
                                                 <TextBlock Text="Storage Contributed" 
                                                           FontSize="12"
                                                           Foreground="#94A3B8"/>
@@ -536,7 +549,7 @@
                                                 Padding="24"
                                                 Margin="6,0">
                                             <StackPanel Spacing="8">
-                                                <TextBlock Text="📦" FontSize="32"/>
+                                                <PathIcon Data="{StaticResource BoxIcon}" Width="32" Height="32"/>
                                                 <TextBlock Text="Storage Quota" 
                                                           FontSize="12"
                                                           Foreground="#94A3B8"/>
@@ -555,7 +568,7 @@
                                                 Padding="24"
                                                 Margin="12,0,0,0">
                                             <StackPanel Spacing="8">
-                                                <TextBlock Text="⏱" FontSize="32"/>
+                                                <PathIcon Data="{StaticResource ClockIcon}" Width="32" Height="32"/>
                                                 <TextBlock Text="Total Uptime" 
                                                           FontSize="12"
                                                           Foreground="#94A3B8"/>
