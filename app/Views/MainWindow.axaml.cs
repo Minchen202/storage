@@ -21,6 +21,39 @@ public partial class MainWindow : Window
         _api = new ApiService();
     }
 
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        
+        // Make title bar draggable
+        var titleBar = this.FindControl<Border>("TitleBar");
+        if (titleBar != null)
+        {
+            titleBar.PointerPressed += (s, e) =>
+            {
+                if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+                {
+                    BeginMoveDrag(e);
+                }
+            };
+        }
+        
+        // Wire up window controls
+        var minimizeBtn = this.FindControl<Button>("MinimizeButton");
+        var maximizeBtn = this.FindControl<Button>("MaximizeButton");
+        var closeBtn = this.FindControl<Button>("CloseButton");
+        
+        if (minimizeBtn != null)
+            minimizeBtn.Click += (s, e) => WindowState = WindowState.Minimized;
+        
+        if (maximizeBtn != null)
+            maximizeBtn.Click += (s, e) => 
+                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        
+        if (closeBtn != null)
+            closeBtn.Click += (s, e) => Close();
+    }
+
     private async void OnLoginClick(object sender, RoutedEventArgs e)
     {
         var email = EmailBox.Text;

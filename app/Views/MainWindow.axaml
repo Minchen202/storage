@@ -1,217 +1,614 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="app.MainWindow"
-        Title="Storage App"
-        Width="1200" Height="700"
-        Background="#1F2937">
+        Title="P2P Storage"
+        Width="1400"
+        Height="900"
+        MinWidth="1200"
+        MinHeight="800"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="44"
+        SystemDecorations="None">
 
-    <Grid>
-        <!-- Login/Register Screen -->
-        <Grid Name="LoginScreen" Background="#1F2937" IsVisible="True">
-            <StackPanel Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="P2P Storage" FontSize="32" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,40"/>
-                
-                <TextBlock Text="Email" Foreground="#9CA3AF" Margin="0,0,0,8"/>
-                <TextBox Name="EmailBox" Padding="12" Background="#374151" Foreground="#2e0766" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
-                
-                <TextBlock Text="Password" Foreground="#9CA3AF" Margin="0,0,0,8"/>
-                <TextBox Name="PasswordBox" PasswordChar="*" Padding="12" Background="#374151" Foreground="#2e0766" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#20FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background" Value="#30FFFFFF"/>
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+        
+        <Style Selector="Button:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.98)"/>
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#30FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#4F46E5"/>
+            <Setter Property="Background" Value="#20FFFFFF"/>
+        </Style>
+    </Window.Styles>
 
-                <TextBlock Name="AuthError" Foreground="#EF4444" TextWrapping="Wrap" Margin="0,0,0,16" IsVisible="False"/>
-                
-                <Button Name="LoginButton" Content="Login" Padding="12" Background="#2563EB" Foreground="White" FontWeight="Bold" HorizontalAlignment="Stretch" Margin="0,0,0,8" Click="OnLoginClick"/>
-                <Button Name="RegisterButton" Content="Register" Padding="12" Background="#374151" Foreground="White" HorizontalAlignment="Stretch" Click="OnRegisterClick"/>
-            </StackPanel>
-        </Grid>
+    <Panel>
+        <!-- Acrylic Material Background - adapts to Windows system wallpaper -->
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="#0F172A"
+                    TintOpacity="0.7"
+                    MaterialOpacity="0.85"/>
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
 
-        <!-- Main App Screen -->
-        <Grid Name="AppScreen" IsVisible="False">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="256"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <!-- Main content -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <!-- Sidebar -->
-            <Border Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="0,0,1,0">
-                <Grid RowDefinitions="Auto,*,Auto">
-                    <!-- Header -->
-                    <Border Grid.Row="0" Padding="24,20" BorderBrush="#374151" BorderThickness="0,0,0,1">
-                        <TextBlock Text="P2P Storage" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                    </Border>
+            <!-- Custom Title Bar -->
+            <Border Grid.Row="0"
+                    x:Name="TitleBar"
+                    Background="#15FFFFFF"
+                    BorderBrush="#20FFFFFF"
+                    BorderThickness="0,0,0,1">
+                <Grid Margin="16,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Navigation -->
-                    <StackPanel Grid.Row="1" Margin="16,16,16,0">
-                        <Button Name="FilesTab" Content="My Files" Padding="12" Background="#2563EB" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnFilesTabClick"/>
-                        <Button Name="UploadTab" Content="Upload" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnUploadTabClick"/>
-                        <Button Name="StatsTab" Content="Statistics" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="OnStatsTabClick"/>
-                        <Button Name="SettingsTab" Content="Settings" Padding="12" Background="#374151" Foreground="#9CA3AF" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="OnSettingsTabClick"/>
+                    <!-- App Icon and Title -->
+                    <StackPanel Grid.Column="0" 
+                               Orientation="Horizontal" 
+                               Spacing="12"
+                               VerticalAlignment="Center">
+                        <!-- Custom Cloud SVG Icon -->
+                        <Viewbox Width="20" Height="20">
+                            <Canvas Width="24" Height="24">
+                                <Path Fill="#4F46E5" 
+                                      Data="M12,2C9.24,2 7,4.24 7,7C4.79,7 3,8.79 3,11C3,13.21 4.79,15 7,15H18C19.66,15 21,13.66 21,12C21,10.34 19.66,9 18,9C18,5.69 15.31,3 12,3M12,4C14.21,4 16,5.79 16,8H18C18.55,8 19,8.45 19,9C19,9.55 18.55,10 18,10H7C5.9,10 5,10.9 5,12C5,13.1 5.9,14 7,14H18C18.55,14 19,13.55 19,13H18V11H20C20.55,11 21,11.45 21,12C21,13.66 19.66,15 18,15H7C4.79,15 3,13.21 3,11C3,8.79 4.79,7 7,7C7,4.24 9.24,2 12,2Z"/>
+                            </Canvas>
+                        </Viewbox>
+                        <TextBlock Text="P2P Storage" 
+                                  FontSize="13" 
+                                  FontWeight="SemiBold"
+                                  Foreground="#E2E8F0"
+                                  VerticalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- Status Footer -->
-                    <Border Grid.Row="2" Padding="16" BorderBrush="#374151" BorderThickness="0,1,0,0">
-                        <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Status" FontSize="12" Foreground="#9CA3AF"/>
-                                <Border Grid.Column="1" Background="#10B981" CornerRadius="12" Padding="8,4">
-                                    <TextBlock Name="StatusText" Text="Online" FontSize="11" Foreground="White" FontWeight="Bold"/>
-                                </Border>
-                            </Grid>
-                            <TextBlock Name="UserEmailText" Text="" FontSize="11" Foreground="#9CA3AF" Margin="0,8,0,0"/>
-                        </StackPanel>
-                    </Border>
+                    <!-- Window Controls -->
+                    <StackPanel Grid.Column="2" 
+                               Orientation="Horizontal" 
+                               Spacing="2">
+                        <Button x:Name="MinimizeButton"
+                               Content="−"
+                               Width="46"
+                               Height="32"
+                               Background="Transparent"
+                               Foreground="#94A3B8"
+                               FontSize="16"
+                               Padding="0"
+                               CornerRadius="6"
+                               HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center"/>
+                        <Button x:Name="MaximizeButton"
+                               Content="□"
+                               Width="46"
+                               Height="32"
+                               Background="Transparent"
+                               Foreground="#94A3B8"
+                               FontSize="14"
+                               Padding="0"
+                               CornerRadius="6"
+                               HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center"/>
+                        <Button x:Name="CloseButton"
+                               Content="✕"
+                               Width="46"
+                               Height="32"
+                               Background="Transparent"
+                               Foreground="#94A3B8"
+                               FontSize="16"
+                               Padding="0"
+                               CornerRadius="6"
+                               HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center"/>
+                    </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- Content Area -->
-            <ScrollViewer Grid.Column="1" Background="#111827">
-                <StackPanel Margin="32">
+            <!-- Content below title bar -->
+            <Grid Grid.Row="1" Margin="0">
+            <!-- Login Screen -->
+            <Border x:Name="LoginScreen" 
+                    IsVisible="True"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center">
+                <Border Background="#20FFFFFF"
+                        CornerRadius="24"
+                        Padding="60,50"
+                        BoxShadow="0 25 50 -12 #40000000">
+                    <Border.Effect>
+                        <BlurEffect Radius="0"/>
+                    </Border.Effect>
                     
-                    <!-- Files Content -->
-                    <StackPanel Name="FilesContent" IsVisible="True">
-                        <Grid Margin="0,0,0,24">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="My Files" FontSize="28" FontWeight="Bold" Foreground="White"/>
-                            <Button Grid.Column="1" Name="UploadFileButton" Content="+ Upload File" Padding="12,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnUploadFileClick"/>
-                        </Grid>
+                    <StackPanel Width="420" Spacing="24">
+                        <!-- Logo and title -->
+                        <StackPanel Spacing="12" HorizontalAlignment="Center">
+                            <Border Width="80" Height="80" 
+                                    CornerRadius="20"
+                                    Background="#4F46E5"
+                                    BoxShadow="0 10 25 -5 #604F46E5">
+                                <Viewbox Width="48" Height="48" 
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="White" 
+                                              Data="M12,2C9.24,2 7,4.24 7,7C4.79,7 3,8.79 3,11C3,13.21 4.79,15 7,15H18C19.66,15 21,13.66 21,12C21,10.34 19.66,9 18,9C18,5.69 15.31,3 12,3M12,4C14.21,4 16,5.79 16,8H18C18.55,8 19,8.45 19,9C19,9.55 18.55,10 18,10H7C5.9,10 5,10.9 5,12C5,13.1 5.9,14 7,14H18C18.55,14 19,13.55 19,13H18V11H20C20.55,11 21,11.45 21,12C21,13.66 19.66,15 18,15H7C4.79,15 3,13.21 3,11C3,8.79 4.79,7 7,7C7,4.24 9.24,2 12,2Z"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Border>
+                            
+                            <TextBlock Text="P2P Storage" 
+                                      FontSize="32" 
+                                      FontWeight="Bold"
+                                      Foreground="White"
+                                      HorizontalAlignment="Center"
+                                      Margin="0,8,0,0"/>
+                            
+                            <TextBlock Text="Decentralized file storage for everyone" 
+                                      FontSize="14" 
+                                      Foreground="#94A3B8"
+                                      HorizontalAlignment="Center"/>
+                        </StackPanel>
 
-                        <TextBox Name="SearchBox" Watermark="🔍 Search files..." Padding="12" Background="#1F2937" Foreground="White" BorderThickness="1" BorderBrush="#374151" Margin="0,0,0,16"/>
+                        <!-- Input fields -->
+                        <StackPanel Spacing="16" Margin="0,12,0,0">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Email" 
+                                          FontSize="13" 
+                                          FontWeight="SemiBold"
+                                          Foreground="#CBD5E1"/>
+                                <TextBox x:Name="EmailBox" 
+                                        Watermark="you@example.com"
+                                        Height="48"/>
+                            </StackPanel>
 
-                        <StackPanel Name="FilesList">
-                            <!-- Files will be added dynamically -->
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Password" 
+                                          FontSize="13" 
+                                          FontWeight="SemiBold"
+                                          Foreground="#CBD5E1"/>
+                                <TextBox x:Name="PasswordBox" 
+                                        PasswordChar="•"
+                                        Watermark="••••••••"
+                                        Height="48"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Error message -->
+                        <TextBlock x:Name="AuthError" 
+                                  IsVisible="False"
+                                  TextWrapping="Wrap"
+                                  Foreground="#EF4444"
+                                  FontSize="13"
+                                  Margin="0,-8,0,0"/>
+
+                        <!-- Buttons -->
+                        <StackPanel Spacing="12">
+                            <Button x:Name="LoginButton"
+                                   Click="OnLoginClick"
+                                   Content="Sign In"
+                                   Background="#4F46E5"
+                                   Foreground="White"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Center"
+                                   Height="48"
+                                   FontSize="15"/>
+                            
+                            <Button x:Name="RegisterButton"
+                                   Click="OnRegisterClick"
+                                   Content="Create Account"
+                                   Background="#20FFFFFF"
+                                   Foreground="White"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Center"
+                                   Height="48"
+                                   FontSize="15"/>
                         </StackPanel>
                     </StackPanel>
+                </Border>
+            </Border>
 
-                    <!-- Upload Content -->
-                    <StackPanel Name="UploadContent" IsVisible="False">
-                        <TextBlock Text="Upload File" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,24"/>
-                        
-                        <Border Background="#1F2937" BorderBrush="#4B5563" BorderThickness="2" CornerRadius="8" Padding="64,48" Margin="0,0,0,24">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                                <TextBlock Text="Drag and drop files here" FontSize="18" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,8"/>
-                                <TextBlock Text="or click to browse" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                                <Button Name="SelectFileButton" Content="Select Files" Padding="16,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnSelectFileClick"/>
+            <!-- Main App Screen -->
+            <Grid x:Name="AppScreen" 
+                  IsVisible="False"
+                  Margin="24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Top bar -->
+                <Border Grid.Row="0"
+                        Background="#15FFFFFF"
+                        CornerRadius="16"
+                        Padding="24,16"
+                        Margin="0,0,0,20"
+                        BoxShadow="0 4 6 -1 #30000000">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16">
+                            <Viewbox Width="32" Height="32">
+                                <Canvas Width="24" Height="24">
+                                    <Path Fill="#4F46E5" 
+                                          Data="M12,2C9.24,2 7,4.24 7,7C4.79,7 3,8.79 3,11C3,13.21 4.79,15 7,15H18C19.66,15 21,13.66 21,12C21,10.34 19.66,9 18,9C18,5.69 15.31,3 12,3M12,4C14.21,4 16,5.79 16,8H18C18.55,8 19,8.45 19,9C19,9.55 18.55,10 18,10H7C5.9,10 5,10.9 5,12C5,13.1 5.9,14 7,14H18C18.55,14 19,13.55 19,13H18V11H20C20.55,11 21,11.45 21,12C21,13.66 19.66,15 18,15H7C4.79,15 3,13.21 3,11C3,8.79 4.79,7 7,7C7,4.24 9.24,2 12,2Z"/>
+                                </Canvas>
+                            </Viewbox>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="P2P Storage" 
+                                          FontSize="16" 
+                                          FontWeight="Bold"
+                                          Foreground="White"/>
+                                <TextBlock x:Name="UserEmailText"
+                                          Text=""
+                                          FontSize="12"
+                                          Foreground="#94A3B8"/>
                             </StackPanel>
-                        </Border>
+                        </StackPanel>
 
-                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24">
-                            <StackPanel>
-                                <TextBlock Text="Upload Settings" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
-                                <CheckBox Name="EncryptCheck" Content="Encrypt before upload" Foreground="#D1D5DB" IsChecked="True" Margin="0,0,0,12"/>
-                                <CheckBox Name="ErasureCodingCheck" Content="Enable erasure coding" Foreground="#D1D5DB" IsChecked="True" Margin="0,0,0,12"/>
-                                <TextBlock Text="Redundancy level" Foreground="#D1D5DB" Margin="0,0,0,8"/>
-                                <ComboBox Name="RedundancyCombo" Background="#374151" Foreground="White" SelectedIndex="0">
-                                    <ComboBoxItem>Standard (4+2 chunks)</ComboBoxItem>
-                                    <ComboBoxItem>High (3+3 chunks)</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- Statistics Content -->
-                    <StackPanel Name="StatsContent" IsVisible="False">
-                        <TextBlock Text="Statistics" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,24"/>
-                        
-                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
-                            <Border Grid.Row="0" Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,8,8">
-                                <StackPanel>
-                                    <TextBlock Text="Storage Contributed" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                    <TextBlock Name="StorageContributed" Text="10 GB" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Available to network" FontSize="12" Foreground="#9CA3AF"/>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12">
+                            <Border Background="#1510B981" 
+                                    CornerRadius="20"
+                                    Padding="12,8">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="●" 
+                                              Foreground="#10B981"
+                                              FontSize="12"
+                                              VerticalAlignment="Center"/>
+                                    <TextBlock Text="Connected" 
+                                              Foreground="#10B981"
+                                              FontSize="12"
+                                              FontWeight="SemiBold"
+                                              VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                            <Border Grid.Row="0" Grid.Column="1" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="8,0,0,8">
-                                <StackPanel>
-                                    <TextBlock Text="Storage Quota" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                    <TextBlock Name="StorageQuota" Text="12.5 GB" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Earned from uptime" FontSize="12" Foreground="#9CA3AF"/>
+                <!-- Main content area -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="280"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Sidebar -->
+                    <Border Grid.Column="0"
+                            Background="#15FFFFFF"
+                            CornerRadius="16"
+                            Padding="16"
+                            Margin="0,0,20,0"
+                            BoxShadow="0 4 6 -1 #30000000">
+                        <StackPanel Spacing="8">
+                            <Button x:Name="FilesTab"
+                                   Click="OnFilesTabClick"
+                                   Background="#4F46E5"
+                                   Foreground="White"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Left"
+                                   Height="44"
+                                   Padding="16,0">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📁" FontSize="16"/>
+                                    <TextBlock Text="My Files" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="UploadTab"
+                                   Click="OnUploadTabClick"
+                                   Background="#10FFFFFF"
+                                   Foreground="#94A3B8"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Left"
+                                   Height="44"
+                                   Padding="16,0">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="⬆" FontSize="16"/>
+                                    <TextBlock Text="Upload" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="StatsTab"
+                                   Click="OnStatsTabClick"
+                                   Background="#10FFFFFF"
+                                   Foreground="#94A3B8"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Left"
+                                   Height="44"
+                                   Padding="16,0">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📊" FontSize="16"/>
+                                    <TextBlock Text="Statistics" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="SettingsTab"
+                                   Click="OnSettingsTabClick"
+                                   Background="#10FFFFFF"
+                                   Foreground="#94A3B8"
+                                   HorizontalAlignment="Stretch"
+                                   HorizontalContentAlignment="Left"
+                                   Height="44"
+                                   Padding="16,0">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="⚙" FontSize="16"/>
+                                    <TextBlock Text="Settings" FontSize="14" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Storage info card -->
+                            <Border Background="#10FFFFFF"
+                                    CornerRadius="12"
+                                    Padding="16"
+                                    Margin="0,24,0,0">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="Storage Overview" 
+                                              FontSize="13"
+                                              FontWeight="SemiBold"
+                                              Foreground="#CBD5E1"/>
+                                    
+                                    <StackPanel Spacing="6">
+                                        <TextBlock x:Name="StorageUsageText"
+                                                  Text="0 GB / 0 GB"
+                                                  FontSize="18"
+                                                  FontWeight="Bold"
+                                                  Foreground="White"/>
+                                        
+                                        <Border Height="6" 
+                                                CornerRadius="3"
+                                                Background="#20FFFFFF"
+                                                ClipToBounds="True">
+                                            <Border x:Name="StorageUsageBar"
+                                                   Width="0"
+                                                   HorizontalAlignment="Left"
+                                                   CornerRadius="3">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                                                        <GradientStop Color="#4F46E5" Offset="0"/>
+                                                        <GradientStop Color="#7C3AED" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                        </Border>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
+                        </StackPanel>
+                    </Border>
 
-                            <Border Grid.Row="1" Grid.Column="0" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,8,0">
-                                <StackPanel>
-                                    <TextBlock Text="Total Uptime" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                    <TextBlock Name="TotalUptime" Text="96 hours" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
-                                    <TextBlock Text="+2.5 GB earned" FontSize="12" Foreground="#9CA3AF"/>
+                    <!-- Content area -->
+                    <Border Grid.Column="1"
+                            Background="#15FFFFFF"
+                            CornerRadius="16"
+                            Padding="32"
+                            BoxShadow="0 4 6 -1 #30000000">
+                        <Grid>
+                            <!-- Files Content -->
+                            <ScrollViewer x:Name="FilesContent" IsVisible="True">
+                                <StackPanel Spacing="24">
+                                    <Grid>
+                                        <TextBlock Text="My Files" 
+                                                  FontSize="28" 
+                                                  FontWeight="Bold"
+                                                  Foreground="White"/>
+                                        <Button Content="+ Upload File"
+                                               Click="OnUploadFileClick"
+                                               Background="#4F46E5"
+                                               Foreground="White"
+                                               HorizontalAlignment="Right"
+                                               Height="40"
+                                               Padding="20,0"/>
+                                    </Grid>
+
+                                    <StackPanel x:Name="FilesList" Spacing="12"/>
                                 </StackPanel>
-                            </Border>
+                            </ScrollViewer>
 
-                            <Border Grid.Row="1" Grid.Column="1" Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="8,0,0,0">
-                                <StackPanel>
-                                    <TextBlock Text="Peers Connected" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                    <TextBlock Name="PeersConnected" Text="12" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Currently online" FontSize="12" Foreground="#9CA3AF"/>
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-
-                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,16,0,0">
-                            <StackPanel>
-                                <TextBlock Text="Storage Usage" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Used" FontSize="12" Foreground="#9CA3AF"/>
-                                    <TextBlock Grid.Column="1" Name="StorageUsageText" Text="2.35 GB / 12.5 GB" FontSize="12" Foreground="White"/>
-                                </Grid>
-                                <Border Background="#374151" Height="12" CornerRadius="6" Margin="0,8,0,0">
-                                    <Border Name="StorageUsageBar" Background="#2563EB" Height="12" CornerRadius="6" HorizontalAlignment="Left" Width="150"/>
+                            <!-- Upload Content -->
+                            <StackPanel x:Name="UploadContent" 
+                                       IsVisible="False"
+                                       Spacing="24"
+                                       VerticalAlignment="Center">
+                                <TextBlock Text="Upload File" 
+                                          FontSize="28" 
+                                          FontWeight="Bold"
+                                          Foreground="White"
+                                          HorizontalAlignment="Center"/>
+                                
+                                <Border Background="#10FFFFFF"
+                                        BorderBrush="#304F46E5"
+                                        BorderThickness="2"
+                                        CornerRadius="16"
+                                        Padding="80"
+                                        HorizontalAlignment="Center">
+                                    <StackPanel Spacing="20" HorizontalAlignment="Center">
+                                        <TextBlock Text="📤" 
+                                                  FontSize="64"
+                                                  HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Click to select a file" 
+                                                  FontSize="18"
+                                                  FontWeight="SemiBold"
+                                                  Foreground="White"
+                                                  HorizontalAlignment="Center"/>
+                                        <TextBlock Text="or drag and drop here" 
+                                                  FontSize="14"
+                                                  Foreground="#94A3B8"
+                                                  HorizontalAlignment="Center"
+                                                  Margin="0,-12,0,0"/>
+                                        <Button Content="Select File"
+                                               Click="OnSelectFileClick"
+                                               Background="#4F46E5"
+                                               Foreground="White"
+                                               Height="44"
+                                               Padding="32,0"
+                                               Margin="0,8,0,0"/>
+                                    </StackPanel>
                                 </Border>
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
 
-                    <!-- Settings Content -->
-                    <StackPanel Name="SettingsContent" IsVisible="False">
-                        <TextBlock Text="Settings" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,24"/>
-                        
-                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="Storage Contribution" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
-                                <TextBlock Text="Contribute to network" Foreground="#D1D5DB" Margin="0,0,0,8"/>
-                                <Slider Name="StorageSlider" Minimum="10" Maximum="100" Value="10" Margin="0,0,0,8"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="10 GB (minimum)" FontSize="12" Foreground="#9CA3AF"/>
-                                    <TextBlock Grid.Column="1" Text="100 GB" FontSize="12" Foreground="#9CA3AF" HorizontalAlignment="Right"/>
-                                </Grid>
+                            <!-- Stats Content -->
+                            <ScrollViewer x:Name="StatsContent" IsVisible="False">
+                                <StackPanel Spacing="24">
+                                    <TextBlock Text="Statistics" 
+                                              FontSize="28" 
+                                              FontWeight="Bold"
+                                              Foreground="White"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Stat Card 1 -->
+                                        <Border Grid.Column="0"
+                                                Background="#10FFFFFF"
+                                                CornerRadius="12"
+                                                Padding="24"
+                                                Margin="0,0,12,0">
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="💾" FontSize="32"/>
+                                                <TextBlock Text="Storage Contributed" 
+                                                          FontSize="12"
+                                                          Foreground="#94A3B8"/>
+                                                <TextBlock x:Name="StorageContributed"
+                                                          Text="0 GB"
+                                                          FontSize="24"
+                                                          FontWeight="Bold"
+                                                          Foreground="White"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Stat Card 2 -->
+                                        <Border Grid.Column="1"
+                                                Background="#10FFFFFF"
+                                                CornerRadius="12"
+                                                Padding="24"
+                                                Margin="6,0">
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="📦" FontSize="32"/>
+                                                <TextBlock Text="Storage Quota" 
+                                                          FontSize="12"
+                                                          Foreground="#94A3B8"/>
+                                                <TextBlock x:Name="StorageQuota"
+                                                          Text="0 GB"
+                                                          FontSize="24"
+                                                          FontWeight="Bold"
+                                                          Foreground="White"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Stat Card 3 -->
+                                        <Border Grid.Column="2"
+                                                Background="#10FFFFFF"
+                                                CornerRadius="12"
+                                                Padding="24"
+                                                Margin="12,0,0,0">
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="⏱" FontSize="32"/>
+                                                <TextBlock Text="Total Uptime" 
+                                                          FontSize="12"
+                                                          Foreground="#94A3B8"/>
+                                                <TextBlock x:Name="TotalUptime"
+                                                          Text="0 hours"
+                                                          FontSize="24"
+                                                          FontWeight="Bold"
+                                                          Foreground="White"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <!-- Settings Content -->
+                            <StackPanel x:Name="SettingsContent" 
+                                       IsVisible="False"
+                                       Spacing="24">
+                                <TextBlock Text="Settings" 
+                                          FontSize="28" 
+                                          FontWeight="Bold"
+                                          Foreground="White"/>
+
+                                <Border Background="#10FFFFFF"
+                                        CornerRadius="12"
+                                        Padding="24">
+                                    <StackPanel Spacing="20">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Text="API Endpoint" 
+                                                      FontSize="13"
+                                                      FontWeight="SemiBold"
+                                                      Foreground="#CBD5E1"/>
+                                            <TextBox x:Name="ApiEndpointBox" 
+                                                    Text="https://p2p-storage-api.onrender.com"
+                                                    Height="44"/>
+                                        </StackPanel>
+
+                                        <Button Content="Save Settings"
+                                               Click="OnSaveSettingsClick"
+                                               Background="#4F46E5"
+                                               Foreground="White"
+                                               Height="44"
+                                               HorizontalAlignment="Left"
+                                               Padding="32,0"/>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
-                        </Border>
-
-                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="Application Settings" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
-                                <CheckBox Content="Start on system boot" Foreground="#D1D5DB" Margin="0,0,0,12"/>
-                                <CheckBox Content="Minimize to system tray" Foreground="#D1D5DB" IsChecked="True" Margin="0,0,0,12"/>
-                                <CheckBox Content="Show notifications" Foreground="#D1D5DB" IsChecked="True"/>
-                            </StackPanel>
-                        </Border>
-
-                        <Border Background="#1F2937" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="24">
-                            <StackPanel>
-                                <TextBlock Text="Network Settings" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,16"/>
-                                <TextBlock Text="API Endpoint" Foreground="#D1D5DB" Margin="0,0,0,8"/>
-                                <TextBox Name="ApiEndpointBox" Text="http://localhost:8080" Padding="12" Background="#374151" Foreground="White" BorderThickness="1" BorderBrush="#4B5563" Margin="0,0,0,16"/>
-                                <Button Name="SaveSettingsButton" Content="Save Settings" Padding="12,8" Background="#2563EB" Foreground="White" FontWeight="Bold" Click="OnSaveSettingsClick"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                </StackPanel>
-            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+            
+            </Grid>
         </Grid>
-    </Grid>
+    </Panel>
 </Window>
